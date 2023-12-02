@@ -21,11 +21,16 @@ public final class IntegerDuplicateDeleter extends DuplicateDeleter<Integer> {
             }
             else{
                 if(count >= maxNumberOfDuplications){
-                    this.array = removeAndGetNewArray(this.array, i, comparing);
-                    count = 1; // reset count
-                    comparing = this.array[i];
+                    this.array = removeAndGetNewArray(this.array, count, comparing);
+                    i = i - count; // made new array, so starting i at new index
                 }
+                count = 1;
+                comparing = this.array[i];
             }
+
+        }
+        if(count >= maxNumberOfDuplications){
+            this.array = removeAndGetNewArray(this.array, count, comparing);
         }
         return this.array;
     }
