@@ -1,5 +1,6 @@
 package com.zipcodewilmington.looplabs;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -16,7 +17,7 @@ public final class IntegerDuplicateDeleter extends DuplicateDeleter<Integer> {
         int count = 1;
 
         for(int i = 1; i < this.array.length; i++){
-            if(comparing == this.array[i]){
+            if(Objects.equals(comparing, this.array[i])){
                 count++;
             }
             else{
