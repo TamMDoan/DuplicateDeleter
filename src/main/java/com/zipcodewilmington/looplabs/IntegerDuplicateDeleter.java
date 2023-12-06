@@ -13,55 +13,70 @@ public final class IntegerDuplicateDeleter extends DuplicateDeleter<Integer> {
     }
     @Override
     public Integer[] removeDuplicates(int maxNumberOfDuplications) {
-        Integer comparing = this.array[0];
+        Integer[] arrToUse = sort(this.array);
+        Integer comparing = arrToUse[0];
         int count = 1;
 
-        for(int i = 1; i < this.array.length; i++){
-            if(Objects.equals(comparing, this.array[i])){
+        for(int i = 1; i < arrToUse.length; i++){
+            if(Objects.equals(comparing, arrToUse[i])){
                 count++;
             }
             else{
                 if(count >= maxNumberOfDuplications){
-                    this.array = removeAndGetNewArray(this.array, count, comparing);
+                    arrToUse = removeAndGetNewArray(arrToUse, count, comparing);
                     i = i - count; // made new array, so starting i at new index
                 }
                 count = 1;
-                comparing = this.array[i];
+                comparing = arrToUse[i];
             }
 
         }
         if(count >= maxNumberOfDuplications){
-            this.array = removeAndGetNewArray(this.array, count, comparing);
+            arrToUse = removeAndGetNewArray(arrToUse, count, comparing);
         }
-        return this.array;
+        return arrToUse;
     }
 
     @Override
     public Integer[] removeDuplicatesExactly(int exactNumberOfDuplications) {
-        Integer comparing = this.array[0];
+        Integer[] arrToUse = sort(this.array);
+        Integer comparing = arrToUse[0];
         int count = 1;
 
-        for(int i = 1; i < this.array.length; i++){
-            if(count == exactNumberOfDuplications && !this.array[i].equals(comparing)){
-                this.array = removeAndGetNewArray(this.array, count, comparing);
+        for(int i = 1; i < arrToUse.length; i++){
+            if(count == exactNumberOfDuplications && !arrToUse[i].equals(comparing)){
+                arrToUse = removeAndGetNewArray(arrToUse, count, comparing);
                 i = i - count;
                 count = 1;
-                comparing = this.array[i];
+                comparing = arrToUse[i];
             }
-            else if(comparing == this.array[i]){
+            else if(comparing == arrToUse[i]){
                 count++;
             }
             else{
                 count = 1;
-                comparing = this.array[i];
+                comparing = arrToUse[i];
             }
         }
         // if the last few indexes are duplicates
         if(count == exactNumberOfDuplications){
-            this.array = removeAndGetNewArray(this.array, count, comparing);
+            arrToUse = removeAndGetNewArray(arrToUse, count, comparing);
         }
 
-        return this.array;
+        return arrToUse;
+    }
+
+    public Integer[] sort(Integer[] arr){
+        for(int i = 0; i < arr.length - 1; i++){
+            for(int j = 0; j < arr.length - i - 1; j++){
+                if(arr[j] > arr[j+1]){
+                    int temp = arr[j+1];
+                    arr[j+1] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+        return arr;
     }
 
     public Integer[] removeAndGetNewArray(Integer[] arr, int count, int duplicate){
