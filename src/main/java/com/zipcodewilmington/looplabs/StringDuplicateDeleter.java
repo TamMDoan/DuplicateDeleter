@@ -14,28 +14,57 @@ public final class StringDuplicateDeleter extends DuplicateDeleter<String> {
 
     @Override
     public String[] removeDuplicates(int maxNumberOfDuplications) {
-        // you gotta sort the strings!
-        String comparing = this.array[0];
+        String[] arrToUse = this.array;
+        String comparing = arrToUse[0];
         int count = 1;
 
-        for(int i = 1; i < this.array.length; i++){
-            if(Objects.equals(comparing, this.array[i])){
+        for(int i = 1; i < arrToUse.length; i++){
+            if(Objects.equals(comparing, arrToUse[i])){
                 count++;
             }
             else{
-                if(count >= maxNumberOfDuplications && comparing != this.array[i+1]){
-                    this.array = removeAndGetNewArray(this.array, count, comparing);
+                if(count >= maxNumberOfDuplications && !arrToUse[i].equals(comparing)){
+                    arrToUse = removeAndGetNewArray(arrToUse, count, comparing);
                     i = i - count; // made new array, so starting i at new index
                 }
                 count = 1;
-                comparing = this.array[i];
+                comparing = arrToUse[i];
             }
 
         }
         if(count >= maxNumberOfDuplications){
-            this.array = removeAndGetNewArray(this.array, count, comparing);
+            arrToUse = removeAndGetNewArray(arrToUse, count, comparing);
         }
-        return this.array;
+        return arrToUse;
+    }
+
+    @Override
+    public String[] removeDuplicatesExactly(int exactNumberOfDuplications) {
+        String[] arrToUse = this.array;
+        String comparing = arrToUse[0];
+        int count = 1;
+
+        for(int i = 1; i < arrToUse.length; i++){
+            if(count == exactNumberOfDuplications && !arrToUse[i].equals(comparing)){
+                arrToUse = removeAndGetNewArray(arrToUse, count, comparing);
+                i = i - count;
+                count = 1;
+                comparing = arrToUse[i];
+            }
+            else if(comparing == arrToUse[i]){
+                count++;
+            }
+            else{
+                count = 1;
+                comparing = arrToUse[i];
+            }
+        }
+        // if the last few indexes are duplicates
+        if(count == exactNumberOfDuplications){
+            arrToUse = removeAndGetNewArray(arrToUse, count, comparing);
+        }
+
+        return arrToUse;
     }
 
     private String[] removeAndGetNewArray(String[] arr, int count, String duplicate) {
@@ -53,34 +82,5 @@ public final class StringDuplicateDeleter extends DuplicateDeleter<String> {
             }
         }
         return newArr;
-    }
-
-    @Override
-    public String[] removeDuplicatesExactly(int exactNumberOfDuplications) {
-
-        String comparing = this.array[0];
-        int count = 1;
-
-        for(int i = 1; i < this.array.length; i++){
-            if(count == exactNumberOfDuplications && !this.array[i].equals(comparing)){
-                this.array = removeAndGetNewArray(this.array, count, comparing);
-                i = i - count;
-                count = 1;
-                comparing = this.array[i];
-            }
-            else if(comparing == this.array[i]){
-                count++;
-            }
-            else{
-                count = 1;
-                comparing = this.array[i];
-            }
-        }
-        // if the last few indexes are duplicates
-        if(count == exactNumberOfDuplications){
-            this.array = removeAndGetNewArray(this.array, count, comparing);
-        }
-
-        return this.array;
     }
 }
